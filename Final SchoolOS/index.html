@@ -575,13 +575,13 @@
 
         <div>
           <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Full name</label>
-          <input required name="entry.539050985" type="text" placeholder="Your name"
+          <input required name="entry.1373030889" type="text" placeholder="Your name"
             class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">School name</label>
-          <input required name="entry.18481823463" type="text" placeholder="Your school"
+          <input required name="entry.539050985" type="text" placeholder="Your school"
             class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
         </div>
 
@@ -607,10 +607,10 @@
         <div>
           <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">I am a...</label>
           <select name="entry.936102683" class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]">
-            <option>School Owner / Principal</option>
-            <option>Administrator</option>
-            <option>Teacher</option>
-            <option>Parent</option>
+            <option value="School Owner">School Owner / Principal</option>
+            <option value="Administrator">Administrator</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Parent">Parent</option>
           </select>
         </div>
 
@@ -659,14 +659,28 @@
   }, { threshold: 0.12 });
   revealEls.forEach(el => io.observe(el));
 
-  // Google Form submit -> show success state (fire-and-forget, since the iframe response can't be read cross-origin)
+  // Google Form submit -> show success state.
+  // The iframe's load event is the only cross-origin signal we get that the POST completed;
+  // the 8s timer covers the case where the response is blocked before load ever fires.
   const form = document.getElementById('demo-form');
   const successEl = document.getElementById('form-success');
+  const iframe = document.getElementById('hidden_iframe');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  let submitted = false;
+
+  function showSuccess() {
+    if (!submitted) return;
+    submitted = false;
+    form.classList.add('hidden');
+    successEl.classList.remove('hidden');
+  }
+
   form.addEventListener('submit', () => {
-    setTimeout(() => {
-      form.classList.add('hidden');
-      successEl.classList.remove('hidden');
-    }, 600);
+    submitted = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    iframe.addEventListener('load', showSuccess, { once: true });
+    setTimeout(showSuccess, 8000);
   });
 </script>
 
