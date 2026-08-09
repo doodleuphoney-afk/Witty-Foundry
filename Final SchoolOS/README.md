@@ -18,7 +18,27 @@ A single static HTML file (Tailwind via CDN + vanilla JS). No build step require
 
 ## Google Form
 
-The contact form is wired up to a live Google Form (`1FAIpQLSdq76LElg8AFDDw3eVYKQzfvZlUZBe6e4QK2-f2_ll6kdXFHA`) with all 7 fields mapped to their real `entry.xxxxxxx` IDs: Full name, School name, Email, Phone, Country, "I am a...", and the optional notes field. No further setup needed unless you change the Google Form's questions — if you do, you'll need to regenerate a pre-filled link and update the matching `entry.xxxxxxx` values in `index.html`.
+The contact form posts to a live Google Form (`1FAIpQLSdq76LElg8AFDDw3eVYKQzfvZlUZBe6e4QK2-f2_ll6kdXFHA`). Current field mapping:
+
+| Question | `name` attribute |
+| --- | --- |
+| Full Name | `entry.1373030889` |
+| School Name | `entry.539050985` |
+| Email | `entry.1848182346` |
+| Phone | `entry.1215452919` |
+| Country | `entry.885935966` |
+| I am a... | `entry.936102683` |
+| Anything we should know? | `entry.366546603` |
+
+The "I am a..." `<option value="...">` strings must match the Google Form's choices **exactly** (`School Owner`, `Administrator`, `Teacher`, `Parent`) — an unrecognised choice makes Google reject the entire response.
+
+If you change the form's questions, re-read the authoritative IDs from the live form rather than guessing:
+
+```bash
+curl -sL "https://docs.google.com/forms/d/e/<FORM_ID>/viewform" | grep -o 'FB_PUBLIC_LOAD_DATA_ = .*'
+```
+
+Each question appears as `[<questionId>,"<Title>",null,<type>,[[<entryId>,...`  — the `entryId` is what goes into `name="entry.<entryId>"`.
 
 ## Files
 
