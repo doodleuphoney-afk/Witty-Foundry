@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SchoolOS — AI Assistant for Every School</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#8B6FB3;
+    --purple-light:#EAE2F5;
+    --purple-deep:#5B4A82;
+    --purple-ink:#332748;
+    --ink:#191320;
+    --yellow:#F5E94F;
+    --yellow-soft:#FBF6C9;
+    --paper:#FDFCF5;
+    --white:#FFFFFF;
+  }
+  *{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .font-display{font-family:'Space Grotesk',sans-serif;}
+  .font-script{font-family:'Playfair Display',serif; font-style:italic;}
+
+  /* Signature element: misregistered press-print offset type */
+  .offset-text{
+    position:relative;
+    display:inline-block;
+    color:var(--ink);
+  }
+  .offset-text::before{
+    content:attr(data-text);
+    position:absolute;
+    top:0; left:0;
+    color:var(--yellow);
+    transform:translate(7px,7px);
+    z-index:-1;
+    white-space:pre-wrap;
+  }
+  @media (max-width:640px){
+    .offset-text::before{transform:translate(4px,4px);}
+  }
+
+  /* Use on dark backgrounds so the base text stays legible instead of near-black */
+  .offset-text.on-dark{ color:var(--white); }
+
+  .cut-card{
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .nav-blur{
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+
+  ::selection{ background:var(--yellow); color:var(--ink); }
+
+  .faq-item[open] summary .chev{ transform:rotate(45deg); }
+  summary::-webkit-details-marker{display:none;}
+  summary{list-style:none;}
+
+  .grain{
+    background-image:radial-gradient(var(--purple-ink) 0.6px, transparent 0.6px);
+    background-size:14px 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    *{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ============ NAV ============ -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-[var(--paper)]/85 border-b border-[var(--purple-ink)]/10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 h-[72px] flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-1 font-display font-bold text-xl">
+      <span class="font-script text-[var(--purple)] text-2xl">school</span>
+      <span class="bg-[var(--purple-light)] text-[var(--purple-ink)] px-2 py-1 rounded-lg leading-none tracking-tight">OS</span>
+    </a>
+    <div class="hidden md:flex items-center gap-9 text-sm font-medium text-[var(--purple-ink)]/80">
+      <a href="#how-it-works" class="hover:text-[var(--purple-ink)] transition-colors">How it works</a>
+      <a href="#products" class="hover:text-[var(--purple-ink)] transition-colors">Products</a>
+      <a href="#demo" class="hover:text-[var(--purple-ink)] transition-colors">Demo</a>
+      <a href="#faq" class="hover:text-[var(--purple-ink)] transition-colors">FAQ</a>
+    </div>
+    <a href="#contact" class="bg-[var(--purple-ink)] hover:bg-[var(--purple-deep)] text-[var(--yellow-soft)] text-sm font-semibold px-5 py-2.5 rounded-full transition-colors">
+      Book a Demo
+    </a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header id="top" class="relative pt-40 pb-24 lg:pt-48 lg:pb-32 overflow-hidden">
+  <div class="absolute -top-20 -right-40 w-[560px] h-[560px] rounded-full bg-[var(--yellow)]/40 blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative grid lg:grid-cols-2 gap-16 items-center">
+
+    <div>
+      <div class="inline-flex items-center gap-2 bg-[var(--yellow-soft)] border border-[var(--yellow)] rounded-full px-4 py-1.5 mb-7">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--purple)]"></span>
+        <span class="text-xs font-semibold tracking-wide text-[var(--purple-ink)] uppercase">solution for streamlining communication.</span>
+      </div>
+
+      <h1 class="font-display font-bold text-[2.6rem] leading-[1.08] sm:text-5xl lg:text-[3.4rem] lg:leading-[1.08] mb-7">
+        <span class="offset-text" data-text="Turn Your School's Information">Turn Your School's Information</span>
+        <br/>into <span class="font-script text-[var(--purple)] font-normal not-italic italic">AI Assistant.</span>
+      </h1>
+
+      <p class="text-lg text-[var(--purple-ink)]/75 max-w-lg mb-10 leading-relaxed">
+        From parent inquiries to teacher resources and staff policies, transform your school's documents into AI assistant that provide instant, accurate answers — customized for your school.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <a href="#contact" class="bg-[var(--purple-ink)] hover:bg-[var(--purple-deep)] text-white font-semibold px-7 py-3.5 rounded-full transition-all hover:-translate-y-0.5 shadow-lg shadow-[var(--purple-ink)]/20">
+          Book a Demo
+        </a>
+        <a href="#how-it-works" class="flex items-center gap-2 font-semibold text-[var(--purple-ink)] px-2 py-3.5 group">
+          See how it works
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-6 mt-14 text-sm text-[var(--purple-ink)]/60">
+        <span>Trusted by schools across Pakistan</span>
+      </div>
+    </div>
+
+    <!-- Chat mockup -->
+    <div class="relative reveal" id="hero-mock">
+      <div class="absolute -top-6 -left-6 w-full h-full rounded-3xl bg-[var(--purple)]/25 -z-10"></div>
+      <div class="bg-white rounded-3xl border border-[var(--purple-ink)]/10 shadow-2xl shadow-[var(--purple-ink)]/10 overflow-hidden">
+        <div class="bg-[var(--purple-ink)] px-5 py-4 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-[var(--yellow)] flex items-center justify-center font-display font-bold text-[var(--purple-ink)] text-sm">OS</div>
+          <div>
+            <p class="text-white text-sm font-semibold">Zahra Academy · Parent Assistant</p>
+            <p class="text-white/50 text-xs flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>Online — answers from school documents only</p>
+          </div>
+        </div>
+        <div class="p-5 space-y-4 bg-[var(--yellow-soft)]/40">
+          <div class="flex justify-end">
+            <div class="bg-[var(--purple)] text-white text-sm rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
+              What documents are required for admission?
+            </div>
+          </div>
+          <div class="flex justify-start">
+            <div class="bg-white text-[var(--ink)] text-sm rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] shadow-sm border border-[var(--purple-ink)]/5">
+              <p class="mb-2">Per the Admission Guide, you'll need:</p>
+              <ul class="space-y-1 text-[var(--purple-ink)]/80">
+                <li>• Birth certificate (original + copy)</li>
+                <li>• Last report card</li>
+                <li>• 4 passport-size photos</li>
+                <li>• Completed application form</li>
+              </ul>
+              <p class="mt-2 text-xs text-[var(--purple-ink)]/50">Source: Admission Guide, p.2</p>
+            </div>
+          </div>
+          <div class="flex justify-start">
+            <div class="bg-white/70 border border-dashed border-[var(--purple-ink)]/20 text-xs text-[var(--purple-ink)]/50 rounded-2xl px-4 py-2 max-w-[70%]">
+              typing indicator · answered in 4s
+            </div>
+          </div>
+        </div>
+        <div class="p-4 border-t border-[var(--purple-ink)]/10 flex items-center gap-3">
+          <div class="flex-1 bg-[var(--paper)] rounded-full px-4 py-2.5 text-sm text-[var(--purple-ink)]/40">Ask about fees, policies, dates…</div>
+          <div class="w-9 h-9 rounded-full bg-[var(--purple-ink)] flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ============ STATS ============ -->
+<section class="py-6">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="bg-[var(--purple-ink)] rounded-[2rem] px-8 py-14 grid grid-cols-2 lg:grid-cols-4 gap-10 reveal">
+      <div class="text-center lg:text-left">
+        <p class="font-display font-bold text-4xl lg:text-5xl text-[var(--yellow)]">80%</p>
+        <p class="text-white/60 text-sm mt-2">Reduction in repetitive inquiries</p>
+      </div>
+      <div class="text-center lg:text-left">
+        <p class="font-display font-bold text-4xl lg:text-5xl text-[var(--yellow)]">24/7</p>
+        <p class="text-white/60 text-sm mt-2">Parent support, no waiting</p>
+      </div>
+      <div class="text-center lg:text-left">
+        <p class="font-display font-bold text-4xl lg:text-5xl text-[var(--yellow)]">Seconds</p>
+        <p class="text-white/60 text-sm mt-2">Average response time</p>
+      </div>
+      <div class="text-center lg:text-left">
+        <p class="font-display font-bold text-4xl lg:text-5xl text-[var(--yellow)]">100%</p>
+        <p class="text-white/60 text-sm mt-2">Customized to your school</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMUNICATION GAP ============ -->
+<section class="py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mb-16 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">the problem</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl leading-tight">Your school already has the answers. They're just scattered.</h2>
+      <p class="text-[var(--purple-ink)]/70 mt-4 leading-relaxed">
+        Between WhatsApp groups, email chains, printed circulars, and a dozen PDFs, the same question gets asked — and answered — over and over. SchoolOS gives every audience its own AI assistant to ask first.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-3xl border border-[var(--purple-ink)]/10 p-8 lg:p-10 reveal">
+        <p class="text-xs font-bold tracking-widest uppercase text-[var(--purple-ink)]/40 mb-6">Before SchoolOS</p>
+        <ul class="space-y-4">
+          <li class="flex gap-3 text-[var(--purple-ink)]/75"><span class="text-[var(--purple-ink)]/30 font-display">–</span>Parents call the front office for basic questions</li>
+          <li class="flex gap-3 text-[var(--purple-ink)]/75"><span class="text-[var(--purple-ink)]/30 font-display">–</span>Teachers dig through PDFs to find one policy line</li>
+          <li class="flex gap-3 text-[var(--purple-ink)]/75"><span class="text-[var(--purple-ink)]/30 font-display">–</span>Staff repeat the same answer dozens of times a week</li>
+          <li class="flex gap-3 text-[var(--purple-ink)]/75"><span class="text-[var(--purple-ink)]/30 font-display">–</span>Different staff give different answers</li>
+          <li class="flex gap-3 text-[var(--purple-ink)]/75"><span class="text-[var(--purple-ink)]/30 font-display">–</span>Information gets lost between circulars and chats</li>
+        </ul>
+      </div>
+
+      <div class="bg-[var(--purple-ink)] rounded-3xl p-8 lg:p-10 reveal">
+	<p class="text-xs font-bold tracking-widest uppercase text-white mb-6"> After SchoolOS </p>
+	<ul class="space-y-4">
+
+          <li class="flex gap-3 text-white/85"><span class="text-[var(--yellow)] font-display">+</span>Instant, accurate answers — day or night</li>
+          <li class="flex gap-3 text-white/85"><span class="text-[var(--yellow)] font-display">+</span>One consistent answer, every single time</li>
+          <li class="flex gap-3 text-white/85"><span class="text-[var(--yellow)] font-display">+</span>A dedicated AI assistant for every audience</li>
+          <li class="flex gap-3 text-white/85"><span class="text-[var(--yellow)] font-display">+</span>Parents self-serve without picking up the phone</li>
+          <li class="flex gap-3 text-white/85"><span class="text-[var(--yellow)] font-display">+</span>Your staff free to focus on meaningful work</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works" class="py-24 lg:py-32 bg-white border-y border-[var(--purple-ink)]/10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mx-auto text-center mb-16 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">how it works</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl">From documents to answers, in four steps</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="reveal">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--yellow)] flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Upload your documents</h3>
+        <p class="text-[var(--purple-ink)]/65 text-sm leading-relaxed">Admission guide, fee structure, calendar, curriculum, handbook — hand over what you already have.</p>
+      </div>
+      <div class="reveal">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--yellow)] flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">We forge your AI assistants</h3>
+        <p class="text-[var(--purple-ink)]/65 text-sm leading-relaxed">Our team builds the assistant your school needs, trained only on your material — nothing borrowed from the open internet.</p>
+      </div>
+      <div class="reveal">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--yellow)] flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4V4zm4 4h8m-8 4h8m-8 4h5"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Deploy on WhatsApp</h3>
+        <p class="text-[var(--purple-ink)]/65 text-sm leading-relaxed">Live on WhatsApp — wherever your community already messages you every day.</p>
+      </div>
+      <div class="reveal">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--yellow)] flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Everyone starts asking</h3>
+        <p class="text-[var(--purple-ink)]/65 text-sm leading-relaxed">Parents, teachers, and staff get instant answers — and stop calling the front office.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS ============ -->
+<section id="products" class="py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mb-16 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">what we build</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl">SchoolOS builds the AI assistant for your school.</h2>
+      <p class="text-[var(--purple-ink)]/70 mt-4 leading-relaxed">Create a dedicated AI assistant for every audience in your school — each trained only on the documents relevant to it, available over WhatsApp.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-4 gap-6">
+      <div class="cut-card bg-white border border-[var(--purple-ink)]/10 p-7 hover:shadow-xl hover:shadow-[var(--purple-ink)]/5 transition-shadow reveal">
+        <p class="text-2xl mb-4">👨‍👩‍👧</p>
+        <h3 class="font-display font-semibold text-xl mb-3">Parent AI Assistant</h3>
+        <p class="text-[var(--purple-ink)]/60 text-xs font-semibold tracking-wide uppercase mb-3">Instantly answers</p>
+        <ul class="space-y-1.5 text-sm text-[var(--purple-ink)]/70 mb-5">
+          <li>• Admissions</li>
+          <li>• Fees</li>
+          <li>• School timings</li>
+          <li>• Uniform</li>
+          <li>• Academic calendar</li>
+          <li>• Transport</li>
+          <li>• Events</li>
+          <li>• School policies</li>
+        </ul>
+        <p class="text-[var(--purple-ink)]/60 text-xs font-semibold tracking-wide uppercase mb-2">Available on</p>
+        <p class="text-sm text-[var(--purple-ink)]/75">WhatsApp</p>
+      </div>
+
+      <div class="cut-card bg-[var(--purple-light)] p-7 hover:shadow-xl hover:shadow-[var(--purple-ink)]/10 transition-shadow reveal">
+        <p class="text-2xl mb-4">👩‍🏫</p>
+        <h3 class="font-display font-semibold text-xl mb-3 text-[var(--purple-ink)]">Teacher AI Assistant</h3>
+        <p class="text-[var(--purple-deep)] text-xs font-semibold tracking-wide uppercase mb-3">Helps teachers with</p>
+        <ul class="space-y-1.5 text-sm text-[var(--purple-ink)]/70 mb-5">
+          <li>• Lesson planning</li>
+          <li>• Worksheets</li>
+          <li>• Quizzes</li>
+          <li>• Rubrics</li>
+          <li>• Classroom activities</li>
+          <li>• Curriculum guidance</li>
+          <li>• Assessment support</li>
+        </ul>
+        <p class="text-[var(--purple-ink)]/50 text-xs leading-relaxed">Uses your school's curriculum and internal teaching resources.</p>
+      </div>
+
+      <div class="cut-card bg-white border border-[var(--purple-ink)]/10 p-7 hover:shadow-xl hover:shadow-[var(--purple-ink)]/5 transition-shadow reveal">
+        <p class="text-2xl mb-4">🏢</p>
+        <h3 class="font-display font-semibold text-xl mb-3">Staff AI Assistant</h3>
+        <p class="text-[var(--purple-ink)]/60 text-xs font-semibold tracking-wide uppercase mb-3">Instant access to</p>
+        <ul class="space-y-1.5 text-sm text-[var(--purple-ink)]/70 mb-5">
+          <li>• Teacher handbook</li>
+          <li>• HR policies</li>
+          <li>• SOPs</li>
+          <li>• Administrative procedures</li>
+          <li>• Internal documents</li>
+          <li>• Circulars</li>
+          <li>• School policies</li>
+        </ul>
+      </div>
+
+      <div class="cut-card bg-[var(--yellow)] p-7 hover:shadow-xl hover:shadow-[var(--yellow)]/30 transition-shadow reveal relative">
+        <span class="absolute top-6 right-6 text-[10px] font-bold tracking-widest uppercase bg-[var(--purple-ink)] text-white px-2.5 py-1 rounded-full">Most flexible</span>
+        <p class="text-2xl mb-4">✨</p>
+        <h3 class="font-display font-semibold text-xl mb-3 text-[var(--purple-ink)]">Custom AI Assistants</h3>
+        <p class="text-[var(--purple-ink)]/70 text-sm mb-3">Need something different? We build AI assistants for:</p>
+        <ul class="space-y-1.5 text-sm text-[var(--purple-ink)]/80 mb-5">
+          <li>• Admissions Office</li>
+          <li>• Finance</li>
+          <li>• Library</li>
+          <li>• Transport</li>
+          <li>• Student Services</li>
+          <li>• Alumni Relations</li>
+          <li>• HR</li>
+          <li>• Any department in your school</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNLIMITED POSSIBILITIES ============ -->
+<section class="py-24 lg:py-32 bg-white border-y border-[var(--purple-ink)]/10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mb-16 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">built around your school</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl mb-4">One Platform. Unlimited Possibilities.</h2>
+      <p class="text-[var(--purple-ink)]/70 leading-relaxed">Every school operates differently. That's why we don't sell one generic chatbot — we build AI assistant tailored to the way your school works.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l8 4v4c0 4.4-3.4 8.2-8 9-4.6-.8-8-4.6-8-9V8l8-4z"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Admissions Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h2m4 0h4M5 6h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Finance Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20V4a2 2 0 00-2-2H6.5A2.5 2.5 0 004 4.5v15z"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Library Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-6h14l2 6v6a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H6v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-6z"/><circle cx="7" cy="16" r="1"/><circle cx="17" cy="16" r="1"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Transport Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Principal's Office Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M6 21v-2a6 6 0 0112 0v2M19 8a3 3 0 100-6"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Counselor Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">IT Helpdesk Assistant</h4>
+      </div>
+      <div class="bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--purple-ink)]/5 transition-all reveal">
+        <div class="w-10 h-10 rounded-xl bg-[var(--yellow-soft)] flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-3a4 4 0 100-8 4 4 0 000 8zm6 1a4 4 0 100-8"/></svg>
+        </div>
+        <h4 class="font-display font-semibold text-sm">Student Services Assistant</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO ============ -->
+<section id="demo" class="py-24 lg:py-32 bg-[var(--ink)] relative overflow-hidden">
+  <div class="absolute inset-0 grain opacity-[0.04]"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
+    <div class="max-w-2xl mb-16 reveal">
+      <p class="font-script italic text-[var(--yellow)] text-lg mb-3">see it work</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl text-white">Different assistants, built for different questions</h2>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-6 reveal">
+        <p class="text-xs font-bold tracking-widest uppercase text-white/40 mb-5">Parent</p>
+        <div class="bg-white/10 rounded-2xl rounded-tl-sm px-4 py-3 text-white/80 text-sm mb-3">When are winter holidays?</div>
+        <div class="bg-[var(--yellow)] rounded-2xl rounded-tr-sm px-4 py-3 text-[var(--ink)] text-sm">
+          Winter break runs from <span class="font-semibold">Dec 22 – Jan 5</span>, per the Academic Calendar. Classes resume Jan 6.
+        </div>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-6 reveal">
+        <p class="text-xs font-bold tracking-widest uppercase text-white/40 mb-5">Teacher</p>
+        <div class="bg-white/10 rounded-2xl rounded-tl-sm px-4 py-3 text-white/80 text-sm mb-3">Create a Grade 5 worksheet on fractions.</div>
+        <div class="bg-[var(--yellow)] rounded-2xl rounded-tr-sm px-4 py-3 text-[var(--ink)] text-sm">
+          Here's a 10-question worksheet aligned to your Grade 5 curriculum — covering equivalent fractions and simple addition. Ready to export.
+        </div>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-6 reveal">
+        <p class="text-xs font-bold tracking-widest uppercase text-white/40 mb-5">Administrator</p>
+        <div class="bg-white/10 rounded-2xl rounded-tl-sm px-4 py-3 text-white/80 text-sm mb-3">What does our attendance policy say?</div>
+        <div class="bg-[var(--yellow)] rounded-2xl rounded-tr-sm px-4 py-3 text-[var(--ink)] text-sm">
+          Students below <span class="font-semibold">75% attendance</span> require a written guardian excuse, per the Teacher Handbook, Section 4.2.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY SCHOOLS CHOOSE US ============ -->
+<section class="py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mb-16 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">why schoolOS</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl">Built for the way schools actually run</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--purple-ink)]/10 rounded-3xl overflow-hidden border border-[var(--purple-ink)]/10">
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">School-specific knowledge</h4><p class="text-sm text-[var(--purple-ink)]/60">Answers only from your own documents — nothing generic, nothing invented.</p></div>
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">English & Urdu</h4><p class="text-sm text-[var(--purple-ink)]/60">Parents and staff can ask in whichever language they're comfortable with.</p></div>
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">WhatsApp-first</h4><p class="text-sm text-[var(--purple-ink)]/60">Meets parents, teachers, and staff where they already message you every day.</p></div>
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">Secure by design</h4><p class="text-sm text-[var(--purple-ink)]/60">Your documents stay private and are never used to train anything but your own AI.</p></div>
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">Easy setup</h4><p class="text-sm text-[var(--purple-ink)]/60">No IT team required — send us your documents and we handle the rest.</p></div>
+      <div class="bg-[var(--paper)] p-7 reveal"><h4 class="font-display font-semibold mb-2">Built for educators</h4><p class="text-sm text-[var(--purple-ink)]/60">Designed around real school workflows, not repurposed enterprise software.</p></div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="py-24 lg:py-32">
+  <div class="max-w-3xl mx-auto px-6 lg:px-10">
+    <div class="mb-14 reveal">
+      <p class="font-script italic text-[var(--purple)] text-lg mb-3">questions</p>
+      <h2 class="font-display font-bold text-3xl lg:text-4xl">Before you ask us, a few answers</h2>
+    </div>
+
+    <div class="space-y-3 reveal">
+      <details class="faq-item bg-white border border-[var(--purple-ink)]/10 rounded-2xl px-6 py-2 group" open>
+        <summary class="flex items-center justify-between py-4 cursor-pointer font-display font-semibold">
+          Do we need technical expertise to set this up?
+          <span class="chev text-[var(--purple)] text-xl transition-transform">+</span>
+        </summary>
+        <p class="text-[var(--purple-ink)]/65 text-sm pb-5 leading-relaxed">No. Send us your documents and we build, configure, and deploy your AI assistant for you. No IT team or developer needed on your side.</p>
+      </details>
+      <details class="faq-item bg-white border border-[var(--purple-ink)]/10 rounded-2xl px-6 py-2 group">
+        <summary class="flex items-center justify-between py-4 cursor-pointer font-display font-semibold">
+          Can it answer only from our documents?
+          <span class="chev text-[var(--purple)] text-xl transition-transform">+</span>
+        </summary>
+        <p class="text-[var(--purple-ink)]/65 text-sm pb-5 leading-relaxed">Yes — by design. Each assistant is restricted to the documents relevant to it, so it never invents policies or pulls in unrelated information from the open internet.</p>
+      </details>
+      <details class="faq-item bg-white border border-[var(--purple-ink)]/10 rounded-2xl px-6 py-2 group">
+        <summary class="flex items-center justify-between py-4 cursor-pointer font-display font-semibold">
+          Can parents use it over WhatsApp?
+          <span class="chev text-[var(--purple)] text-xl transition-transform">+</span>
+        </summary>
+        <p class="text-[var(--purple-ink)]/65 text-sm pb-5 leading-relaxed">Yes — that's the primary way parents reach your Parent AI Assistant, the channel they already use to message your school every day.</p>
+      </details>
+      <details class="faq-item bg-white border border-[var(--purple-ink)]/10 rounded-2xl px-6 py-2 group">
+        <summary class="flex items-center justify-between py-4 cursor-pointer font-display font-semibold">
+          How long does setup take?
+          <span class="chev text-[var(--purple)] text-xl transition-transform">+</span>
+        </summary>
+        <p class="text-[var(--purple-ink)]/65 text-sm pb-5 leading-relaxed">Most schools are live within four weeks of sharing their documents, with a short call to confirm tone and edge cases before launch.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA + CONTACT FORM ============ -->
+<section id="contact" class="py-24 lg:py-32 bg-[var(--purple-ink)] relative overflow-hidden">
+  <div class="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full bg-[var(--purple)]/30 blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative grid lg:grid-cols-2 gap-16 items-start">
+
+    <div class="reveal">
+
+      <p class="text-white/65 text-lg leading-relaxed mb-8 max-w-md">
+        Give your school AI assistant that support parents, teachers, staff, and students — around the clock, from day one.<h2 class="font-display font-bold text-3xl lg:text-[2.6rem] leading-tight text-white mb-6">
+  Ready to close the <span class="text-[#F6E7A1]">communication gap?</span>
+</h2>
+
+      </p>
+      <p class="text-white/65 leading-relaxed mb-10 max-w-md">
+        Whatever's slowing your school down — a front desk fielding the same admission questions, parents waiting on a WhatsApp reply, teachers digging through PDFs mid-class, or different staff giving different answers — SchoolOS resolves it with one consistent, always-on assistant built from your own documents, so every question gets the same accurate answer, instantly.
+      </p>
+      <div class="space-y-4 text-white/70 text-sm">
+        <div class="flex gap-3"><span class="text-[var(--yellow)]">✓</span>Free walkthrough with your own sample documents</div>
+        <div class="flex gap-3"><span class="text-[var(--yellow)]">✓</span>Live in about four weeks</div>
+        <div class="flex gap-3"><span class="text-[var(--yellow)]">✓</span>No commitment to see a demo</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl p-8 lg:p-10 reveal" id="contact-form-card">
+
+      <div id="form-success" class="hidden text-center py-10">
+        <div class="w-14 h-14 rounded-full bg-[var(--yellow)] flex items-center justify-center mx-auto mb-5">
+          <svg class="w-6 h-6 text-[var(--purple-ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-xl mb-2">Request received</h3>
+        <p class="text-[var(--purple-ink)]/60 text-sm">We'll reach out within one business day to schedule your demo.</p>
+      </div>
+
+      <form id="demo-form"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSdq76LElg8AFDDw3eVYKQzfvZlUZBe6e4QK2-f2_ll6kdXFHA/formResponse"
+
+        method="POST"
+        target="hidden_iframe"
+        class="space-y-5">
+
+        <h3 class="font-display font-semibold text-xl mb-1">Book your free demo</h3>
+        <p class="text-[var(--purple-ink)]/50 text-sm mb-6">Takes less than a minute.</p>
+
+        <div>
+          <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Full name</label>
+          <input required name="entry.1373030889" type="text" placeholder="Your name"
+            class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">School name</label>
+          <input required name="entry.539050985" type="text" placeholder="Your school"
+            class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Country</label>
+          <input required name="entry.885935966" type="text" placeholder="Your country"
+            class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Email</label>
+            <input required name="entry.1848182346" type="email" placeholder="you@school.edu"
+              class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Phone</label>
+            <input name="entry.1215452919" type="tel" placeholder="03xx xxxxxxx"
+              class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">I am a...</label>
+          <select name="entry.936102683" class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]">
+            <option value="School Owner">School Owner / Principal</option>
+            <option value="Administrator">Administrator</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Parent">Parent</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[var(--purple-ink)]/70 mb-1.5">Anything we should know?</label>
+          <textarea name="entry.366546603" rows="3" placeholder="Optional"
+            class="w-full bg-[var(--paper)] border border-[var(--purple-ink)]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple)]"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-[var(--purple-ink)] hover:bg-[var(--purple-deep)] text-white font-semibold py-3.5 rounded-xl transition-colors">
+          Book Your Free Demo
+        </button>
+
+        <p class="text-[11px] text-[var(--purple-ink)]/40 text-center leading-relaxed pt-1">
+          This form submits to Google Forms. 
+        </p>
+      </form>
+
+      <!-- Hidden iframe so the Google Forms submission doesn't navigate away from the page -->
+      <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-[var(--ink)] py-14">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
+    <a href="#top" class="flex items-center gap-1 font-display font-bold text-lg">
+      <span class="font-script text-white text-xl">school</span>
+      <span class="bg-[var(--yellow)] text-[var(--purple-ink)] px-1.5 py-0.5 rounded leading-none">OS</span>
+    </a>
+    <p class="text-white/40 text-sm text-center">© 2026 SchoolOS. AI assistant built for schools.</p>
+    <div class="flex gap-6 text-sm text-white/40">
+      <a href="#faq" class="hover:text-white/70 transition-colors">FAQ</a>
+      <a href="#contact" class="hover:text-white/70 transition-colors">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Google Form submit -> show success state.
+  // The iframe's load event is the only cross-origin signal we get that the POST completed;
+  // the 8s timer covers the case where the response is blocked before load ever fires.
+  const form = document.getElementById('demo-form');
+  const successEl = document.getElementById('form-success');
+  const iframe = document.getElementById('hidden_iframe');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  let submitted = false;
+
+  function showSuccess() {
+    if (!submitted) return;
+    submitted = false;
+    form.classList.add('hidden');
+    successEl.classList.remove('hidden');
+  }
+
+  form.addEventListener('submit', () => {
+    submitted = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    iframe.addEventListener('load', showSuccess, { once: true });
+    setTimeout(showSuccess, 8000);
+  });
+</script>
+
+</body>
+</html>
